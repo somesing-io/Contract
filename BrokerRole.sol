@@ -32,7 +32,7 @@ contract BrokerRole {
         _removeBroker(msg.sender);
     }
     
-    function getBrokerCount() public view returns (int8) {
+    function getBrokerCount() public view returns (uint256) {
         return _brokers.getCount();
     }
 
