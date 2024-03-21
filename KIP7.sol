@@ -41,8 +41,6 @@ contract KIP7 is KIP13, IKIP7 {
     /*
      *     bytes4(keccak256('totalSupply()')) == 0x18160ddd
      *     bytes4(keccak256('balanceOf(address)')) == 0x70a08231
-     *     bytes4(keccak256('freeBalance(address)')) == 0x95b881de
-     *     bytes4(keccak256('frozenBalance(address)')) == 0x266565a9     
      *     bytes4(keccak256('transfer(address,uint256)')) == 0xa9059cbb
      *     bytes4(keccak256('allowance(address,address)')) == 0xdd62ed3e
      *     bytes4(keccak256('approve(address,uint256)')) == 0x095ea7b3
@@ -52,13 +50,23 @@ contract KIP7 is KIP13, IKIP7 {
      *     bytes4(keccak256("safeTransferFrom(address,address,uint256)")) == 0x42842e0e
      *     bytes4(keccak256("safeTransferFrom(address,address,uint256,bytes)")) == 0xb88d4fde
      *
-     *     => 0x18160ddd ^ 0x70a08231 ^ 0x95b881de ^ 0x266565a9 ^ 0xa9059cbb ^ 0xdd62ed3e ^ 0x095ea7b3 ^ 0x23b872dd ^ 0x423f6cef ^ 0xeb795549 ^ 0x42842e0e ^ 0xb88d4fde == 0xd6a59706
+     *     => 0x18160ddd ^ 0x70a08231 ^ 0xa9059cbb ^ 0xdd62ed3e ^ 0x095ea7b3 ^ 0x23b872dd ^ 0x423f6cef ^ 0xeb795549 ^ 0x42842e0e ^ 0xb88d4fde == 0x65787371
      */
-    bytes4 private constant _INTERFACE_ID_KIP7 = 0xd6a59706;
+
+
+    /*
+     *     bytes4(keccak256('freeBalance(address)')) == 0x95b881de
+     *     bytes4(keccak256('frozenBalance(address)')) == 0x266565a9
+     *
+     *     => 0x95b881de ^ 0x266565a9 == 0xb3dde477
+     */
+    bytes4 private constant _INTERFACE_ID_KIP7 = 0x65787371;
+    bytes4 private constant _INTERFACE_ID_KIP7TOKEN = 0xb3dde477;
 
     constructor () public {
         // register the supported interfaces to conform to KIP7 via KIP13
         _registerInterface(_INTERFACE_ID_KIP7);
+        _registerInterface(_INTERFACE_ID_KIP7TOKEN);
     }
 
     /**
@@ -281,6 +289,7 @@ contract KIP7 is KIP13, IKIP7 {
         require(account != address(0), "KIP7: dispossess zero address");
         _frozen_balances[account] = _frozen_balances[account].sub(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
+        emit UnLock(account, amount);
         emit Transfer(account, msg.sender, amount);
     }
     
