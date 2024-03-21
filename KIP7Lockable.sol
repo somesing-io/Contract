@@ -11,11 +11,11 @@ contract KIP7Lockable is KIP13, KIP7,LockerRole {
     /*
      *     bytes4(keccak256('distribute(address,uint256)')) == 0xfb932108
      *     bytes4(keccak256('unLock(address,uint256)')) == 0x16a59ed0
-     *     bytes4(keccak256('dispossess(address,uint256)')) == 0x16a59ed0
+     *     bytes4(keccak256('dispossess(address,uint256)')) == 0x3cf2eb85
      *
-     *     => 0xfb932108 ^ 0x16a59ed0 ^ 0x16a59ed0 == 0x16a59ed0
+     *     => 0xfb932108 ^ 0x16a59ed0 ^ 0x3cf2eb85 == 0xd1c4545d
      */
-    bytes4 private constant _INTERFACE_ID_KIP7_LOCKABLE = 0x16a59ed0;
+    bytes4 private constant _INTERFACE_ID_KIP7_LOCKABLE = 0xd1c4545d;
 
     /**
      * @dev Constructor function.
